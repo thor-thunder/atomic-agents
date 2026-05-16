@@ -1,4 +1,3 @@
-::
 Use the MCPs, run with npx commands… and use specific this Context7 before all code.
 
 Agent and sub agents Design a 6-layer coding hierarchy (**atomic-agents**):
