@@ -10,6 +10,12 @@ Think of it like building AI applications with LEGO blocks - each component is:
 - **Composable**: Easily combines with other components
 - **Predictable**: Produces consistent, reliable outputs
 
+## Tool Calling & UI Generation Workflow
+
+* **Always**: Describe scene → Claude generates SVG/Canvas/React component → Replit previews live
+
+This pattern enables rapid prototyping and visualization of agent outputs through integrated tool calling.
+
 ## Core Philosophy
 
 - **Predictable AI Behavior**: Controlled, schema-driven agent construction vs. autonomous but unpredictable multi-agent systems
