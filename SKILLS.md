@@ -105,14 +105,6 @@ For complex workflows, use a 6-layer hierarchy:
 
 ---
 
-## context.md - Shared Language for Atomic Agents
-
-Located at: `.claude/skills/assets/context.md`
-
-This file establishes a shared language to prevent context drift and verbosity cascades across the codebase. See the assets folder for the full context reference.
-
----
-
 ## /tdd - Vertical Slicing Development
 
 Break development into strict, isolated vertical slices. Never write tests or code in bulk. One test → one implementation → one green bar.
