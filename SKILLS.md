@@ -1,46 +1,115 @@
 # Skills - Atomic Agents Development Framework
 
-This document outlines the disciplined, minimalist reasoning framework for atomic-agents development. Based on Matt Pocock's skills-driven approach, these skills enforce structural soundness and prevent context drift.
+## What is Atomic Agents?
 
----
+Atomic Agents is a lightweight, modular Python framework for building Agentic AI applications. The framework is built around the principle of **atomicity** - creating single-purpose, reusable, and composable components for AI pipelines.
 
-## context.md - Shared Language for Atomic Agents
-
-This file establishes a shared language to prevent context drift and verbosity cascades across the codebase.
-
-### Core Concepts
-
-#### Atomicity
-Each component (agent, tool, context provider) is:
+Think of it like building AI applications with LEGO blocks - each component is:
 - **Single-purpose**: Does one thing well
 - **Reusable**: Can be used in multiple pipelines
 - **Composable**: Easily combines with other components
 - **Predictable**: Produces consistent, reliable outputs
 
-#### Agent Architecture
-- **Agent**: Autonomous unit executing defined tasks
-- **Tool**: Reusable function agents can call
-- **Context Provider**: Supplies relevant context during execution
-- **Schema**: Pydantic-based structured outputs
+## Tool Calling & UI Generation Workflow
 
-#### Agent Hierarchy (6-Layer)
-1. **Researcher** (Sub-Agent-1): Investigates requirements
-2. **Planner** (Sub-Agent-2): Designs approach
-3. **Architect** (Sub-Agent-3): Structures solution
-4. **Builder** (Sub-Agent-4): Implements code
-5. **Critic/Refiner** (Sub-Agent-5): Reviews and improves
-6. **Supreme Leader Orchestrator** (Main Agent): Coordinates all sub-agents
+* **Always**: Describe scene → Claude generates SVG/Canvas/React component → Replit previews live
 
-#### Model Assignment
-- **Opus-4.6**: Supreme Leader Orchestrator (reasoning, coordination)
-- **Haiku-4.5**: All sub-agents (efficiency, parallel execution)
+This pattern enables rapid prototyping and visualization of agent outputs through integrated tool calling.
 
-### Anchoring Rules
+## Core Philosophy
 
-1. **Single Source of Truth**: Return to this section before adding new concepts
-2. **No Context Drift**: When discussing design decisions, reference this shared language
-3. **Minimal Abstractions**: Only create new terminology when it solves a real verbosity problem
-4. **Decision Tree Clarity**: Every decision branches from a parent concept defined here
+- **Predictable AI Behavior**: Controlled, schema-driven agent construction vs. autonomous but unpredictable multi-agent systems
+- **Modular Development**: Build AI applications using familiar software engineering principles
+- **Type Safety**: Consistent input/output contracts through Pydantic schemas
+- **Developer Control**: Full visibility and control over AI behavior with no hidden abstractions
+
+## Anatomy of an Agent
+
+Every Atomic Agent consists of:
+
+1. **System Prompt** - Defines agent behavior and purpose
+2. **Input Schema** (Pydantic model) - Validates and structures input
+3. **Output Schema** (Pydantic model) - Ensures consistent output format
+4. **Chat History** - Maintains conversation context
+5. **Context Providers** - Injects dynamic runtime context
+6. **Tools** (optional) - Function calling capabilities
+
+## Project Structure
+
+```
+atomic-agents/
+├── atomic-agents/          # Core framework library (PyPI: atomic-agents)
+├── atomic-assembler/       # CLI tool for managing components
+├── atomic-examples/        # Example projects and use cases
+├── atomic-forge/           # Collection of downloadable tools
+├── docs/                   # Sphinx documentation
+├── guides/                 # Development guides
+└── README.md              # Main documentation
+```
+
+### Package Details
+
+**atomic-agents/** (Core Framework)
+- `agents/` - AtomicAgent class and agent configuration
+- `base/` - Base abstractions (BaseIOSchema, BaseTool, BasePrompt)
+- `context/` - Chat history and system prompt generation
+- `connectors/` - External integrations (MCP support)
+- `memory/` - Memory management systems
+- `prompting/` - Prompt engineering utilities
+- `services/` - Service integrations
+
+**atomic-assembler/** (CLI Tool)
+- Interactive TUI for browsing and downloading tools
+- Command: `atomic`
+
+**atomic-forge/** (Tool Repository)
+- arxiv_search, bocha_search, calculator, datetime_tool
+- fia_signals, hackernews_search, pdf_reader, searxng_search
+- tavily_search, weather, webpage_scraper, wikipedia_search, youtube_transcript_scraper
+
+## Core Technologies
+
+- **Language**: Python 3.12+
+- **AI/LLM Integration**: Instructor (supports 10+ providers)
+- **Data Validation**: Pydantic v2
+- **CLI Framework**: Textual (TUI), Rich (terminal formatting)
+- **Testing**: pytest with coverage
+- **Documentation**: Sphinx + MyST + ReadTheDocs
+- **Build System**: uv (with hatchling)
+
+## LLM Provider Compatibility
+
+Through Instructor, supports all major providers:
+- OpenAI, Anthropic (Claude), Groq, Mistral, Cohere, Google Gemini, Ollama, and more
+
+## Execution Modes
+
+- **Synchronous**: `agent.run(input_data)`
+- **Asynchronous**: `await agent.run_async(input_data)`
+- **Streaming**: `agent.run_stream(input_data)` and `agent.run_async_stream(input_data)`
+
+## 6-Layer Agent Hierarchy (Atomic Agents Pattern)
+
+For complex workflows, use a 6-layer hierarchy:
+
+1. **Researcher** (Sub-Agent-1): Investigates requirements and gathers information
+2. **Planner** (Sub-Agent-2): Designs approach and breaks down tasks
+3. **Architect** (Sub-Agent-3): Structures solution and defines interfaces
+4. **Builder** (Sub-Agent-4): Implements code and creates components
+5. **Critic/Refiner** (Sub-Agent-5): Reviews, tests, and improves work
+6. **Supreme Leader Orchestrator** (Main Agent): Coordinates all sub-agents and manages workflow
+
+### Model Assignment for 6-Layer Pattern
+- **Opus-4.6**: Supreme Leader Orchestrator (reasoning, coordination, complex analysis)
+- **Haiku-4.5**: All sub-agents (efficiency, parallel execution, cost optimization)
+
+---
+
+## context.md - Shared Language for Atomic Agents
+
+Located at: `.claude/skills/assets/context.md`
+
+This file establishes a shared language to prevent context drift and verbosity cascades across the codebase. See the assets folder for the full context reference.
 
 ---
 
