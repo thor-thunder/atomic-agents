@@ -1,3 +1,24 @@
+## ⚡ Essential Parallel Execution Guidance
+
+**ALWAYS run atomic-agents and the 6-agent team in parallel with MCP running on the side.** This is how the system achieves its full power:
+
+```bash
+# Session 1 (Primary): 6-Agent team handles your main request
+python -m claude.agents.main --request "Your main task" --verbose
+
+# Session 2 (Parallel): MCP tools discover & integrate available resources
+# Tools run asynchronously, discovering capabilities while team works
+atomic  # Explore tools, load components
+
+# Session 3 (Parallel): Extended agents handle specialized work
+# Custom agents stack on top of team for domain-specific tasks
+python custom_agent.py
+```
+
+The magic happens when all three run simultaneously — the team orchestrates at the top level while MCP provides dynamic tools and context. See SKILL.md for trigger patterns that activate this automatically.
+
+---
+
 # Atomic Agents Framework - Claude Code Documentation
 
 This is the development documentation for **atomic-agents**, a lightweight and modular Python framework for building Agentic AI applications.
