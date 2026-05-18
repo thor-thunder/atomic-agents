@@ -2,11 +2,16 @@
 
 Professional orchestration system implementing a 6-agent team that collaboratively handles end-to-end software development tasks using the atomic-agents framework.
 
+**🎯 QUICK ACCESS:** For trigger phrases and quick start, see [AGENTS.SKILL.md](./.claude/AGENTS.SKILL.md)
+
+**⚡ AUTO-TRIGGER:** This system automatically activates when you ask to "build", "implement", "develop", "create", "fix", "deploy", or describe a development task.
+
 ## Table of Contents
 
-1. [Executive Summary](#executive-summary)
-2. [Team Overview](#team-overview)
-3. [Architecture](#architecture)
+1. [Auto-Trigger Skill](#auto-trigger-skill)
+2. [Executive Summary](#executive-summary)
+3. [Team Overview](#team-overview)
+4. [Architecture](#architecture)
 4. [Shared State Model](#shared-state-model)
 5. [Agent Specifications](#agent-specifications)
 6. [Communication Protocols](#communication-protocols)
@@ -15,6 +20,64 @@ Professional orchestration system implementing a 6-agent team that collaborative
 9. [Usage Examples](#usage-examples)
 10. [API Reference](#api-reference)
 11. [Best Practices](#best-practices)
+
+---
+
+## Auto-Trigger Skill
+
+This system automatically activates when you use trigger phrases. No manual setup needed!
+
+### Automatic Triggers
+
+The agent team activates automatically for:
+
+**Feature Development**
+- "Build a user authentication system"
+- "Implement JWT token handling"
+- "Develop a caching layer"
+- "Add email verification"
+- "Create a REST API"
+
+**Bug Fixes & Maintenance**
+- "Fix the login bug where..."
+- "Refactor the database layer"
+- "Optimize query performance"
+- "Clean up the code"
+
+**Deployment & Operations**
+- "Deploy to production"
+- "Setup CI/CD pipeline"
+- "Migrate database schema"
+- "Release version 2.0"
+
+**Documentation & Analysis**
+- "Document the API"
+- "Analyze security requirements"
+- "Review the implementation"
+
+### How It Works
+
+Simply describe what you need:
+
+```
+"Build a user authentication system with JWT tokens"
+```
+
+The system automatically:
+1. **Routes to Orchestrator** → determines workflow stage
+2. **Routes to Planner** → breaks into tasks
+3. **Routes to Researcher** → gathers context
+4. **Routes to Coder** → implements with TDD
+5. **Routes to Reviewer** → validates quality & security
+6. **Routes to Deployer** → handles CI/CD & docs
+
+All without you needing to know the details!
+
+### Full Skill Documentation
+
+For complete trigger phrases, examples, and superpowers:
+
+→ **See [.claude/AGENTS.SKILL.md](./.claude/AGENTS.SKILL.md)**
 
 ---
 
