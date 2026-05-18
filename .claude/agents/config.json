@@ -1,0 +1,169 @@
+{
+  "team": {
+    "name": "Atomic Agents 6-Team System",
+    "version": "1.0.0",
+    "description": "Professional 6-agent orchestration system for atomic-agents framework",
+    "lead_agent": "orchestrator"
+  },
+  "agents": [
+    {
+      "id": "orchestrator",
+      "name": "Orchestrator",
+      "role": "Lead Agent - Team Coordinator",
+      "model_preference": "gpt-4o",
+      "description": "Coordinates the team, manages workflow stages, makes routing decisions",
+      "module": "orchestrator",
+      "input_schema": "OrchestratorInput",
+      "output_schema": "OrchestratorOutput",
+      "responsibilities": [
+        "Analyze user requests",
+        "Determine workflow stage",
+        "Route tasks to appropriate agents",
+        "Track project state",
+        "Make high-level decisions"
+      ]
+    },
+    {
+      "id": "planner",
+      "name": "Planner",
+      "role": "Planning & Schema Design Agent",
+      "model_preference": "gpt-4o-mini",
+      "description": "Breaks down requirements into tasks, designs schemas, defines acceptance criteria",
+      "module": "planner",
+      "input_schema": "PlannerInput",
+      "output_schema": "PlannerOutput",
+      "responsibilities": [
+        "Decompose requirements into tasks",
+        "Design input/output schemas",
+        "Define acceptance criteria",
+        "Identify dependencies",
+        "Estimate effort"
+      ]
+    },
+    {
+      "id": "researcher",
+      "name": "Researcher",
+      "role": "Context & Documentation Analyst",
+      "model_preference": "gpt-4o-mini",
+      "description": "Gathers requirements, analyzes documentation, identifies constraints",
+      "module": "researcher",
+      "input_schema": "ResearcherInput",
+      "output_schema": "ResearcherOutput",
+      "responsibilities": [
+        "Review documentation",
+        "Analyze requirements",
+        "Identify constraints",
+        "Map integration points",
+        "Provide architectural context"
+      ]
+    },
+    {
+      "id": "coder",
+      "name": "Coder",
+      "role": "Implementation & TDD Specialist",
+      "model_preference": "gpt-4o-mini",
+      "description": "Writes production-ready code following TDD principles",
+      "module": "coder",
+      "input_schema": "CoderInput",
+      "output_schema": "CoderOutput",
+      "responsibilities": [
+        "Write tests first (TDD)",
+        "Implement code",
+        "Follow framework patterns",
+        "Add documentation",
+        "Handle edge cases"
+      ]
+    },
+    {
+      "id": "reviewer",
+      "name": "Reviewer",
+      "role": "Quality & Security Gatekeeper",
+      "model_preference": "gpt-4o-mini",
+      "description": "Tests code, performs security audit, validates quality",
+      "module": "reviewer",
+      "input_schema": "ReviewerInput",
+      "output_schema": "ReviewerOutput",
+      "responsibilities": [
+        "Run test suite",
+        "Verify coverage",
+        "Security audit",
+        "Check code quality",
+        "Validate acceptance criteria",
+        "Approve/reject code"
+      ]
+    },
+    {
+      "id": "deployer",
+      "name": "Deployer",
+      "role": "DevOps & Optimization Specialist",
+      "model_preference": "gpt-4o-mini",
+      "description": "Handles CI/CD, performance optimization, documentation generation",
+      "module": "deployer",
+      "input_schema": "DeployerInput",
+      "output_schema": "DeployerOutput",
+      "responsibilities": [
+        "Execute deployment steps",
+        "Measure performance",
+        "Optimize code",
+        "Generate documentation",
+        "Create rollback plan",
+        "Monitor deployment"
+      ]
+    }
+  ],
+  "workflow": {
+    "default_stages": [
+      "planning",
+      "research",
+      "implementation",
+      "review",
+      "deployment"
+    ],
+    "handoff_protocol": {
+      "description": "How agents hand off work to the next agent",
+      "steps": [
+        "Current agent completes task, updates ProjectState",
+        "Orchestrator reviews state",
+        "Orchestrator routes to next agent",
+        "Next agent reads state via context providers",
+        "Process repeats until completion"
+      ]
+    }
+  },
+  "context_providers": {
+    "ProjectStateContextProvider": "Full project state with all findings and changes",
+    "TaskContextProvider": "Current task details with acceptance criteria",
+    "ResearchContextProvider": "Research findings and constraints",
+    "CodeContextProvider": "Code changes and implementation status",
+    "ReviewContextProvider": "Test results and quality metrics"
+  },
+  "tools": {
+    "FileReadTool": "Read file contents",
+    "FileWriteTool": "Write to files",
+    "DirectoryListTool": "List directory contents",
+    "ShellExecuteTool": "Execute shell commands safely",
+    "CodeAnalysisTool": "Analyze Python code structure"
+  },
+  "settings": {
+    "max_context_tokens": 100000,
+    "auto_trim_history": true,
+    "enable_streaming": false,
+    "enable_hooks": true,
+    "default_temperature": 0.3,
+    "default_top_p": 0.9,
+    "request_timeout_seconds": 60
+  },
+  "installation": {
+    "requirements": [
+      "atomic-agents>=2.2.0",
+      "instructor>=1.3.0",
+      "pydantic>=2.0",
+      "openai>=1.40.0",
+      "python-dotenv>=1.0.0"
+    ],
+    "optional_providers": [
+      "anthropic>=0.25.0",
+      "groq>=0.4.0"
+    ]
+  }
+}
