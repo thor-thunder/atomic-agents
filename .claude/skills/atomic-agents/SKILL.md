@@ -1,6 +1,6 @@
 ---
 name: atomic-agents
-description: Knowledge skill for the Atomic Agents Python framework in this repo — schemas (`BaseIOSchema`), agents (`AtomicAgent`/`AgentConfig`), tools (`BaseTool`), context providers, prompts, multi-agent orchestration, MCP interop, and running two models (Opus leader + Haiku workers) in parallel. Auto-triggers when code imports from `atomic_agents`, defines an `AtomicAgent`/`BaseTool`/`BaseIOSchema`, or the user asks how the framework works, how to wire a provider, or how to coordinate multiple agents/models.
+description: Knowledge skill for the Atomic Agents Python framework in this repo — schemas (`BaseIOSchema`), agents (`AtomicAgent`/`AgentConfig`), tools (`BaseTool`), context providers, prompts, multi-agent orchestration, MCP interop, and running two models (Opus leader + Sonnet workers) in parallel. Auto-triggers when code imports from `atomic_agents`, defines an `AtomicAgent`/`BaseTool`/`BaseIOSchema`, or the user asks how the framework works, how to wire a provider, or how to coordinate multiple agents/models.
 ---
 
 # Atomic Agents
@@ -47,15 +47,23 @@ Do not use legacy paths like `atomic_agents.lib.base.*` or `atomic_agents.agents
 
 ## Minimum viable agent
 
+This repo standardizes on **Anthropic** — you only need `ANTHROPIC_API_KEY` (no OpenAI key).
+
 ```python
-import os, instructor, openai
+import os, instructor
+from anthropic import Anthropic
 from atomic_agents import AtomicAgent, AgentConfig, BasicChatInputSchema, BasicChatOutputSchema
 from atomic_agents.context import ChatHistory
 
-client = instructor.from_openai(openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"]))
+client = instructor.from_anthropic(Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"]))
 
 agent = AtomicAgent[BasicChatInputSchema, BasicChatOutputSchema](
-    config=AgentConfig(client=client, model="gpt-5-mini", history=ChatHistory())
+    config=AgentConfig(
+        client=client,
+        model="claude-sonnet-4-6",
+        history=ChatHistory(),
+        model_api_parameters={"max_tokens": 1024},   # Anthropic requires max_tokens
+    )
 )
 
 reply = agent.run(BasicChatInputSchema(chat_message="Hello"))
@@ -63,14 +71,14 @@ print(reply.chat_message)
 ```
 
 `AtomicAgent` and `BaseTool` use PEP 695 generics — the type parameters carry runtime
-information, so write them explicitly. Full runnable version:
-`atomic-examples/quickstart/quickstart/1_0_basic_chatbot.py`.
+information, so write them explicitly. The repo's `atomic-examples/quickstart/` defaults to
+OpenAI; swap the client to `instructor.from_anthropic(...)` as above to run it Anthropic-only.
 
-## Two models in parallel (Opus leader + Haiku workers)
+## Two models in parallel (Opus leader + Sonnet workers)
 
 `AgentConfig` is provider/model-agnostic: each agent owns its own `client` + `model`,
-so you can run a **strong leader** and several **cheap workers** at the same time. This
-mirrors the repo's Claude Code orchestration squad (Opus 4.7 leader, Haiku 4.5 workers
+so you can run a **strong leader** and several **fast workers** at the same time. This
+mirrors the repo's Claude Code orchestration squad (Opus 4.7 leader, Sonnet 4.6 workers
 — see the sibling `orchestrate` skill and `.claude/agents/`).
 
 ```python
@@ -80,13 +88,13 @@ from atomic_agents import AtomicAgent, AgentConfig
 
 aclient = instructor.from_anthropic(AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"]))
 
-# Cheap workers — fan out in parallel
+# Workers — fan out in parallel
 worker = lambda: AtomicAgent[WorkerIn, WorkerOut](
-    config=AgentConfig(client=aclient, model="claude-haiku-4-5",
+    config=AgentConfig(client=aclient, model="claude-sonnet-4-6",
                        model_api_parameters={"max_tokens": 2048}))
 # Strong leader — synthesizes once workers return
 leader = AtomicAgent[LeaderIn, LeaderOut](
-    config=AgentConfig(client=aclient, model="claude-opus-4-6",
+    config=AgentConfig(client=aclient, model="claude-opus-4-7",
                        model_api_parameters={"max_tokens": 4096}))
 
 async def run(tasks):
@@ -96,6 +104,22 @@ async def run(tasks):
 
 Give every concurrent agent its **own** `ChatHistory` (or none) — sharing one across
 parallel runs corrupts state. Full pattern in [references/parallel-models.md](references/parallel-models.md).
+
+## Setup & run
+
+The framework is real and on PyPI (`atomic-agents`, this repo is v2.7.x). To run it:
+
+1. **Python 3.12+** — required (PEP 695 generics). This repo is a `uv` workspace, so use
+   `uv` rather than the system interpreter (which may be 3.11).
+2. **Install** — in the repo: `uv sync`. Standalone:
+   `pip install "atomic-agents>=2.7" "instructor[anthropic]"`.
+3. **Key** — `export ANTHROPIC_API_KEY=...` (Anthropic-only; no OpenAI key needed).
+4. **Run** — `uv run python your_script.py`, using the Anthropic snippets above.
+5. **Models** — leader `claude-opus-4-7`, workers `claude-sonnet-4-6`. Anthropic requires
+   `max_tokens` in `model_api_parameters` on every call.
+
+Constructing an `AtomicAgent`/`AgentConfig` is offline; only `.run()`/`.run_async()` hit
+the API, so a live call needs the key set.
 
 ## Decision routing
 

@@ -14,13 +14,13 @@
   multi-step work, "parallel agents", "delegate", "orchestrate".
 - **`release`** (`.claude/skills/release/`) — PyPI + GitHub release flow.
 
-## Orchestration: Opus leader + Haiku workers
+## Orchestration: Opus leader + Sonnet workers
 
 - **Leader = the main session on Opus 4.7** (`claude-opus-4-7`): plans, decomposes,
   synthesizes — "Opus when all is ready".
-- **5 workers on Haiku 4.5** in `.claude/agents/`: `explorer`, `implementer`, `tester`,
+- **5 workers on Sonnet 4.6** in `.claude/agents/`: `explorer`, `implementer`, `tester`,
   `reviewer`, `scribe`. Fan them out in parallel for independent subtasks.
-- **Switch models** with `/model claude-opus-4-7` ↔ `/model claude-haiku-4-5-20251001`, or
+- **Switch models** with `/model claude-opus-4-7` ↔ `/model claude-sonnet-4-6`, or
   by changing the `model:` field in a `.claude/agents/*.md`. Escalate a hard subtask to Opus.
 - Framework-level mirror of this pattern: `.claude/skills/atomic-agents/references/parallel-models.md`.
 

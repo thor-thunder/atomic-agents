@@ -8,8 +8,8 @@ from atomic_agents.context import ChatHistory, SystemPromptGenerator
 from instructor import Mode
 
 config = AgentConfig(
-    client=client,                      # required: instructor-wrapped client
-    model="gpt-5-mini",                 # required: model id
+    client=client,                      # required: instructor.from_anthropic(...)-wrapped client
+    model="claude-sonnet-4-6",          # required: model id
     history=ChatHistory(),              # optional: omit for stateless agents
     system_prompt_generator=SystemPromptGenerator(
         background=["You are a concise research assistant."],
@@ -19,7 +19,7 @@ config = AgentConfig(
     system_role="system",               # None = no system prompt sent
     assistant_role="assistant",         # "model" for Gemini
     mode=Mode.TOOLS,                    # match the Instructor factory mode
-    model_api_parameters={"temperature": 0.2, "max_tokens": 2048},
+    model_api_parameters={"temperature": 0.2, "max_tokens": 2048},  # Anthropic requires max_tokens
 )
 ```
 

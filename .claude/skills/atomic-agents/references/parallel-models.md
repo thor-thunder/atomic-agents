@@ -1,16 +1,16 @@
-# Two Models in Parallel — Opus Leader + Haiku Workers
+# Two Models in Parallel — Opus Leader + Sonnet Workers
 
 The framework puts the `client` and `model` on each agent's `AgentConfig`, so a single
-program can mix model tiers: a **strong, expensive leader** (Opus 4.7) that plans and
-synthesizes, plus several **cheap, fast workers** (Haiku 4.5) that fan out in parallel.
+program can mix model tiers: a **strong leader** (Opus 4.7) that plans and synthesizes,
+plus several **fast workers** (Sonnet 4.6) that fan out in parallel.
 
 This is the framework-level mirror of this repo's Claude Code orchestration squad
-(`.claude/agents/orchestrator.md` on `model: opus`, five workers on `model: haiku`,
+(`.claude/agents/orchestrator.md` on `model: opus`, five workers on `model: sonnet`,
 driven by the `orchestrate` skill).
 
 ## Why split tiers
 
-- **Cost/latency:** workers do the bulk grunt work cheaply and concurrently.
+- **Cost/latency:** workers do the bulk of the work concurrently at the cheaper tier.
 - **Quality where it counts:** the leader is reserved for hard reasoning — planning the
   decomposition and synthesizing worker outputs ("Opus is best when all is ready").
 - **Escalation:** if a worker subtask turns out to be hard, promote *that* call to Opus.
@@ -24,13 +24,13 @@ from atomic_agents import AtomicAgent, AgentConfig
 
 client = instructor.from_anthropic(AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"]))
 
-HAIKU = "claude-haiku-4-5"
-OPUS  = "claude-opus-4-6"   # latest Opus available to your Anthropic account
+SONNET = "claude-sonnet-4-6"
+OPUS   = "claude-opus-4-7"
 
 def make_worker():
     # fresh agent (own history) per concurrent run — never share ChatHistory
     return AtomicAgent[WorkerIn, WorkerOut](
-        config=AgentConfig(client=client, model=HAIKU,
+        config=AgentConfig(client=client, model=SONNET,
                            model_api_parameters={"max_tokens": 2048}))
 
 leader = AtomicAgent[LeaderIn, LeaderOut](
@@ -44,7 +44,7 @@ async def orchestrate(subtasks: list[WorkerIn]) -> LeaderOut:
 
 ## Model switching
 
-- Per agent: change the `model=` string on its `AgentConfig` (HAIKU ↔ OPUS).
+- Per agent: change the `model=` string on its `AgentConfig` (SONNET ↔ OPUS).
 - Anthropic requires `max_tokens` in `model_api_parameters` on every call.
 - To swap providers entirely (OpenAI, Gemini, Groq, Ollama) wrap a different Instructor
   client — schemas and hooks are unchanged. See [providers.md](providers.md).

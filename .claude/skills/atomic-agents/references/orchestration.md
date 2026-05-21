@@ -42,6 +42,11 @@ class BillingRoute(BaseIOSchema):
     topic: Literal["billing"] = "billing"
     normalized_question: str = Field(..., description="Rewritten for the billing agent.")
 
+class TechRoute(BaseIOSchema):
+    """Route to the tech-support agent."""
+    topic: Literal["tech"] = "tech"
+    normalized_question: str = Field(..., description="Rewritten for the tech-support agent.")
+
 class Routing(BaseIOSchema):
     """Routing decision."""
     choice: Union[BillingRoute, TechRoute] = Field(..., description="Routed agent and payload.")

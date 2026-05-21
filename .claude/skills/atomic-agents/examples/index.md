@@ -1,7 +1,8 @@
 # Runnable Examples (in this repo)
 
 Pointers into `atomic-examples/` — read these for full, working code rather than copying
-snippets.
+snippets. These default to OpenAI; swap the client to `instructor.from_anthropic(...)` with
+`model="claude-sonnet-4-6"` (per the SKILL.md snippet) to run them with only `ANTHROPIC_API_KEY`.
 
 | Example | Path | Shows |
 |---|---|---|

@@ -31,6 +31,7 @@ Prefer `Literal[...]` over `Enum` for closed sets — flatter JSON schema helps 
 ## Validators
 
 ```python
+from datetime import date
 from pydantic import field_validator, model_validator
 
 class DateRange(BaseIOSchema):

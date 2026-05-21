@@ -23,7 +23,7 @@ Match `AgentConfig(mode=...)` to the factory mode.
 import os, instructor
 from anthropic import Anthropic
 client = instructor.from_anthropic(Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"]))
-model = "claude-opus-4-6"     # leader; workers use "claude-haiku-4-5"
+model = "claude-opus-4-7"     # leader; workers use "claude-sonnet-4-6"
 api_params = {"max_tokens": 4096}   # Anthropic REQUIRES max_tokens on every call
 ```
 
@@ -39,9 +39,9 @@ Reasoning models often prefer `system_role=None`.
 
 ## Picking a model
 
-- **Drafting / simple chat / parallel workers** — `claude-haiku-4-5`, `gpt-5-mini`, Groq Llama.
-- **Tool use, routing** — `gpt-5`, `claude-sonnet-4-6`.
-- **Hardest reasoning / leader synthesis** — `claude-opus-4-6` or reasoning-tier OpenAI.
+- **Parallel workers / tool use / routing** — `claude-sonnet-4-6` (this repo's worker tier);
+  `claude-haiku-4-5` or `gpt-5-mini` for cheaper fan-out.
+- **Hardest reasoning / leader synthesis** — `claude-opus-4-7` or reasoning-tier OpenAI.
 
 ## `model_api_parameters`
 
