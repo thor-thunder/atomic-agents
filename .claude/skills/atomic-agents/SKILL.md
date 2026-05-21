@@ -113,7 +113,8 @@ The framework is real and on PyPI (`atomic-agents`, this repo is v2.7.x). To run
    `uv` rather than the system interpreter (which may be 3.11).
 2. **Install** — in the repo: `uv sync`. Standalone:
    `pip install "atomic-agents>=2.7" "instructor[anthropic]"`.
-3. **Key** — `export ANTHROPIC_API_KEY=...` (Anthropic-only; no OpenAI key needed).
+3. **Key** — the framework reads `$ANTHROPIC_API_KEY` from the environment (Anthropic-only,
+   no OpenAI key). Provide it as an environment secret — never hardcode or paste a key value.
 4. **Run** — `uv run python your_script.py`, using the Anthropic snippets above.
 5. **Models** — leader `claude-opus-4-7`, workers `claude-sonnet-4-6`. Anthropic requires
    `max_tokens` in `model_api_parameters` on every call.
